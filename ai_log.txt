@@ -1,0 +1,139 @@
+ok look at my update missing score function and tell me why it may not be working ? 
+
+strangely the home sxcore worked but the away_score / vrs_score did not . analyse why this may be
+
+ok so I have to update this check "    # use the fetch_all_matches() method to get the bulk match list
+ and merge the scores based on match_id
+    missing_scores_count = df['score'].isna().sum()
+    if missing_scores_count > 0:"
+
+Look at my update_missing_score module this check"   missing_scores_count = df['score'].isna().sum() | df['team_vs_score'].isna().sum()
+    if missing_scores_count > 0:
+        print(f"Fetching match details to resolve {missing_scores_count} remaining missing scores...")
+        try:
+            all_matches = fetch_all_matches()" 
+is aways going to come true and it is always going to pull the other teams missing data 
+as the vrs score isnt able to be derived using the standard calculation.
+ is it worth removing the second option of pulling the two scores if my model I am trying to train 
+  is only concerned whith the question "If a team kicks from open play more will they score more?"
+
+
+based on this list give me a finalised list of the consolodated fields that my final dataset should have . 
+the aim is to have a single version of every statistic instead of duplicates which have different names 
+cause of the differetn sources for the data :
+valueteam_id34bd3e4eteamPaugame_date20220102team_vsBriveteam_vs_idd416d837match_id5506371dplayers[0c9e0b74, 0f204548, 1e8cb669, 2bca4a65, 461e0...score43.0team_vs_scoreNaN22m_entries0.022m_conversion0.0line_breaks0.0carries0.0kicks0.0post_contact_metres0.0dominant_tackles0.0tackles_made0.0tackles_missed0.0turnovers_won0.0tackle_turnover0.0tackle_offload_allowed0.0ruck_speed_0_3_pctNaNruck_speed_3_6_pctNaNruck_speed_6_plus_pctNaNrucks_won78.0possession0.53territory0.63tries4.0conversionsNaNpenalty_goals5.0drop_goalsNaNclean_breaks4.0defenders_beaten13.0kicks_from_hand15.0lineout_successNaNlineouts_won10.0mauls_won6.0metres_carried263.0offloadsNaNpasses112.0penalties_conceded10.0red_cards0.0scrums_won8.0tackles78.0total_lineouts13.0total_scrumsNaNturnovers_conceded15.0yellow_cards1.0penalty_triesNaNtry_assistsNaNturnoversNaNconversion_goals4.0kick_percent_success1.0lineout_won_steal1.0mauls_total6.0meters_run263.0missed_tackles14.0offload2.0pc_possession_first0.56pc_possession_second0.5pc_territory_first0.64pc_territory_second0.62rucks_total82.0runs95.0scrums_total10.0total_free_kicks_conceded1.0turnover_knock_on8.0
+
+
+ok review my finished consolodate data fields function def consolidate_data_fields(df ):
+    """
+    Consolidates duplicate data fields in the DataFrame into a single field for each statistic.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame containing match statistics.
+    """
+    df = df.copy()
+
+    column_mappings={
+        'conversion_goals': ['conversion_goals', 'conversions'],
+        'kicks_from_hand': ['kicks_from_hand', 'kicks'],
+        'carries': ['carries', 'runs'],
+        'metres_carried': ['metres_carried', 'metres_run'],
+        'offloads': ['offloads', 'offload'],
+        'clean_breaks': ['clean_breaks', 'line_breaks'],
+        'tackles_made': ['tackles_made', 'tackles'],
+        'tackles_missed': ['tackles_missed', 'missed_tackles'],
+        'turnovers_won': ['turnovers_won', 'turnovers'],
+    }
+
+    for consolidated_col, candidate_cols in column_mappings.items():
+        # check which alternative cols names that are actually in the df
+        available_cols = [col for col in candidate_cols
+                          if col in df.columns
+                          ]
+        # swap in the values of the alternative columns in
+        # bfills keeps the value that is not NAN by keeping the value when its not missinig
+        if available_cols:
+            df[consolidated_col] = df[available_cols].bfill(axis=1).iloc[:.0]
+
+    return df
+
+
+
+
+def consolidate_data_fields(df ):
+    """
+    Consolidates duplicate data fields in the DataFrame into a single field for each statistic.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame containing match statistics.
+    """
+    df = df.copy()
+
+    column_mappings={
+        'conversion_goals': ['conversion_goals', 'conversions'],
+        'kicks_from_hand': ['kicks_from_hand', 'kicks'],
+        'carries': ['carries', 'runs'],
+        'metres_carried': ['metres_carried', 'meters_run'],
+        'offloads': ['offloads', 'offload'],
+        'clean_breaks': ['clean_breaks', 'line_breaks'],
+        'tackles_made': ['tackles_made', 'tackles'],
+        'tackles_missed': ['tackles_missed', 'missed_tackles'],
+        'turnovers_won': ['turnovers_won', 'turnovers'],
+    }
+
+    for consolidated_col, candidate_cols in column_mappings.items():
+        # check which alternative cols names that are actually in the df
+        available_cols = [col for col in candidate_cols if col in df.columns ]
+
+        # only run if the entry has two versions of the same data 
+        if len(available_cols) > 1:
+            cols0_data = df[available_cols[0]]
+            cols1_data = df[available_cols[1]]
+            
+
+            combined = np.where(cols0_data.isna() | (cols0_data ==0), cols1_data, cols0_data)
+            df[consolidated_col] = combined
+
+            # Drop the redundant secondary column if it differs from the canonical name
+            cols_to_drop = [col for col in available_cols if col != consolidated_col]
+            df = df.drop(columns=cols_to_drop)
+
+        
+        # if there was only one version of the data present rename to our chosen uniform name 
+        elif len(available_cols) == 1:
+            if available_cols[0] != consolidated_col:
+                df = df.rename(columns={available_cols[0]: consolidated_col})
+
+    return df
+
+---- 
+    ok review my function to create tha target variabl;e 
+def create_target_col(df):
+    """
+    function for adding the target column to my dataset
+    this will be high_tries_scored which is a binary field 
+    it will be 1 if a team scored more than 3 tries in a given game 
+    otherwise it will be 0 ie when they did not score a 'high amount' of tries in the game
+
+    """  
+
+    if df['tries'].notna():
+        result = df.copy()
+
+        result["high_tries_scored"]  = (result['tries'] > 3).astype(int) 
+        # set the boolean value of the check to an int 
+
+        return result 
+
+
+explain a bit about how i would implent walk forward split for my rugby dataset and how this makes my model beter take into account more recent trends in the data than just a pure random split or a regular time/ year based split
+
+tell me different model types that might suit my ML rugby prediction project 
+
+I was thinking of using all of these would there be any issue with doing that for my logistic regression model ? some of the fields may be imputed feature_columns = [
+    "kicks_from_hand",
+    "kick_percent_success",
+    "territory",
+    "possession",
+    "22m_entries",
+]
