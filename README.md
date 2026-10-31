@@ -1,4 +1,6 @@
 ## Ronan Kenny Machine Learning Project 
+repository link: https://github.com/ronankenny17/machine-learning
+
 
 ## Project outline 
 Does open play kicking volume and efficiency significantly increase the probability of a team scoring a lot of tries (>3) in their games? 
