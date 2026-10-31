@@ -38,8 +38,3 @@ Create the proposed binary target, High_Tries_scored (1 if tries > 3, otherwise 
 	As my main baseline dataset before my training / validation/ testing split I will just require values for the tries and kicks_from_hand columns so I will have a larger dataset to work with. Other statistics will be used for training when theyre present.
 
 
-
-### Dataset training/ validation/ testing split 
-Prevent Temporal & Group Leakage:
-    Time Alignment: Always split strictly by date or season (e.g., Train on 2018–2022, Val on 2023, Test on 2024). Random K-Fold cross-validation will leak future tactical trends and player form into the past.
-The games dates range from 2022.01.02 to 2025.09.07
