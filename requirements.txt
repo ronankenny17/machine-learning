@@ -1,3 +1,4 @@
 rugbypy
 pandas
 numpy
+scikit-learn
