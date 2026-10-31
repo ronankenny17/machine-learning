@@ -11,10 +11,10 @@ instead of standard k fold validation which samples at random and doesnt take th
 
 this split method mimicks how actually training data wouldve been integrated into the pipeline over time so the model is trained as if it wouldve been from the beginning of the dataset. It should be better at taking into account modern shifts in trends that may appear in the data. 
 
-Fold 1: Train [2020-2022] ──► Test [2023]
-Fold 2: Train [2020-2023] ──► Test [2024]
-Fold 3: Train [2020-2024] ──► Test [2025]
-Fold 4: Train [2020-2025] ──► Test [2026]
+Fold 1: train on 2022–2024, test on 2025
+Fold 2: train on 2022–2025, test on 2026 (not the full year)
+
+**Note**: the final fold does not contain a full years match data compared to previous years as the season is not yet finished. 
 
 I also added recency based weighting where more recent years (more relevant tactically) will be weighted higher than older years. 
 
