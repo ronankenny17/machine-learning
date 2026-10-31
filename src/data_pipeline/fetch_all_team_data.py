@@ -6,8 +6,6 @@ Module to load team data from the rugbypy package and extract match statistics f
 import pandas as pd 
 #from rugbypy.match import 
 from rugbypy.team import fetch_all_teams, fetch_team_stats
-from data_pipeline.update_missing_scores import update_missing_scores
-from data_pipeline.consolidate_data_fields import consolidate_data_fields
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', 100)
@@ -65,26 +63,8 @@ def fetch_all_team_data():
             pass
 
     if all_team_stats:
-        all_match_stats = pd.concat(all_team_stats, ignore_index=True)
+        return pd.concat(all_team_stats, ignore_index=True)
 
-        # Fill in missing scores using helper func
-        all_match_stats = update_missing_scores(all_match_stats)
-        unique_match_ids = all_match_stats['match_id'].dropna().unique().tolist()
-    else:
-        unique_match_ids = []
-        all_match_stats = pd.DataFrame()
-
-    # use helper function to consolodate duplicate stats 
-    # that may be stored in different names but represent the same data
-    all_match_stats = consolidate_data_fields(all_match_stats)
-
-    return {
-        "all_match_stats": all_match_stats,
-        "unique_match_ids": unique_match_ids ,
-        "total_matches": len(unique_match_ids) ,
-        "total_rows": total_rows,
-        "successful_teams": successful_teams,
-    }
 
 
 

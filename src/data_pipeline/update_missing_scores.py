@@ -4,13 +4,14 @@ tries to fill in the missing value for the teams score by simply adding the trie
 
 """
 import pandas as pd
-from rugbypy.match import fetch_all_matches
+
 
 def update_missing_scores(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Fills missing 'score' and 'team_vs_score' values using:
-    1. Component calculation (tries * 5 + conversions * 2 + penalties * 3 + drops * 3)
-    2. Bulk match table lookup via fetch_all_matches()
+    
+    Fills missing 'score' values using aComponent calculation 
+    (tries * 5 + conversions * 2 + penalties * 3 + drops * 3)
+    
     """
     df = df.copy()
 
