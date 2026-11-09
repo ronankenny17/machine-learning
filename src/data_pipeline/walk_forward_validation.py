@@ -1,6 +1,9 @@
 # walk forward validation split training loop
 import numpy as np
-from sklearn.metrics import roc_auc_score
+from sklearn import pipeline
+from sklearn.metrics import roc_auc_score , confusion_matrix
+
+from data_pipeline.evaluate_model import evaluate_model
 
 # will run loop incrementing the next year to be used for validation / testing 
 #mimicks how data is collected irl over time and improved upon 
@@ -48,17 +51,20 @@ def walk_forward_validation(filtered_dataset, feature_cols, min_train_years=3, p
 
         # fit model model 
         pipeline.fit(X_train, y_train, model__sample_weight=weights)
-        preds = pipeline.predict_proba(X_test)[:, 1]
 
-        pipeline_auc = roc_auc_score(y_test, preds)
-        #print(f"  ROC-AUC: {pipeline_auc:.3f}")
+        predicted_labels = pipeline.predict(X_test)# how confident the model was in its class assignment
+        predicted_probabilities = pipeline.predict_proba(X_test)[:, 1]# 0 or 1 high scoring or no
+        evanluation_metrics = evaluate_model(predicted_labels, y_test, predicted_probabilities)
+        confusion = confusion_matrix(y_test, predicted_labels, labels=[0, 1])
+
         results.append({
             'train_years': train_years,
             'test_year': test_year,
             'train_size': len(train_df),
             'test_size': len(test_df),
-            'roc_auc': pipeline_auc
+            'evaluation_metrics': evanluation_metrics,
+            'confusion_matrix': confusion
         }
         )
-        print(results)
+        #print(results)
     return results 
