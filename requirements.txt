@@ -2,3 +2,4 @@ rugbypy
 pandas
 numpy
 scikit-learn
+matplotlib
