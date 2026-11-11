@@ -7,6 +7,7 @@ ok so I have to update this check "    # use the fetch_all_matches() method to g
     missing_scores_count = df['score'].isna().sum()
     if missing_scores_count > 0:"
 
+
 Look at my update_missing_score module this check"   missing_scores_count = df['score'].isna().sum() | df['team_vs_score'].isna().sum()
     if missing_scores_count > 0:
         print(f"Fetching match details to resolve {missing_scores_count} remaining missing scores...")
@@ -137,3 +138,47 @@ I was thinking of using all of these would there be any issue with doing that fo
     "possession",
     "22m_entries",
 ]
+
+Can you help me now evaluate my models that im trying out . what metrics should i try and how can i get them
+
+
+make my eval metrics into a table instead of the dictionary format i haev right now 
+
+
+Pipeline
+?
+i
+SimpleImputer
+?
+3 features
+kicks_from_handkick_percent_successterritory
+HistGradientBoostingClassifier
+?
+
+ModelTest yearTrain rowsTest rowsAccuracyPrecisionRecallF1ROC-AUC0Dummy baseline2025420410330.5600.0000.0000.0000.5001Dummy baseline202652378280.4690.0000.0000.0000.5002Logistic regression2025420410330.5820.5660.2150.3120.6153Logistic regression202652378280.5720.5850.6700.6250.5684Random forest2025420410330.5180.4740.8770.6160.6265Random forest202652378280.5660.5690.7640.6520.5776Gradient boosting2025420410330.5920.5280.6950.6000.6407Gradient boosting202652378280.5740.5860.6700.6260.573 
+is ther a big drop off in performance 
+
+ok but does that tell me that those are more important features or 
+just that in generat thrre features probably isnt enough in general 
+when trying to train models 
+
+
+ok look at my collect_predictions_details modeule am i implememting correctly and will this help me do a proper error analysis 
+
+ok what is the aim of the error analysis at the moment i am just collecting the false positive and false negative info 
+should i also look at the input data too?
+
+how can i analyse the data input to the model during training / testing and see if certain values in the feature info was a big issue for my model to figure out 
+
+
+can you suggest some tuning params for me to give to grid search cv for tuning my gradient booster model 
+
+give me the markdown for this results table Model	Test year	Train rows	Test rows	Accuracy	Precision	Recall	F1	ROC-AUC
+0	Dummy baseline	2025	4204	1033	0.560	0.000	0.000	0.000	0.500
+1	Dummy baseline	2026	5237	828	0.469	0.000	0.000	0.000	0.500
+2	Logistic regression	2025	4204	1033	0.583	0.525	0.547	0.536	0.633
+3	Logistic regression	2026	5237	828	0.594	0.607	0.668	0.636	0.624
+4	Random forest	2025	4204	1033	0.576	0.511	0.862	0.642	0.667
+5	Random forest	2026	5237	828	0.603	0.589	0.832	0.690	0.653
+6	Gradient boosting	2025	4204	1033	0.582	0.515	0.857	0.644	0.681
+7	Gradient boosting	2026	5237	828	0.610	0.597	0.818	0.690	0.656
