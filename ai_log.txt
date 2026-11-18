@@ -182,3 +182,9 @@ give me the markdown for this results table Model	Test year	Train rows	Test rows
 5	Random forest	2026	5237	828	0.603	0.589	0.832	0.690	0.653
 6	Gradient boosting	2025	4204	1033	0.582	0.515	0.857	0.644	0.681
 7	Gradient boosting	2026	5237	828	0.610	0.597	0.818	0.690	0.656
+
+I have to write a report for a machine learning project . 
+I have combined different reports asnd write ups i have completed as part of the process .
+some of the reports are in markdown and some are in docx. 
+i want this to be in a word doc so keep it in that format. 
+help me format and clean up the following i give you to be used for my final report 
