@@ -183,8 +183,16 @@ give me the markdown for this results table Model	Test year	Train rows	Test rows
 6	Gradient boosting	2025	4204	1033	0.582	0.515	0.857	0.644	0.681
 7	Gradient boosting	2026	5237	828	0.610	0.597	0.818	0.690	0.656
 
+can you help me implement code to check what percentage of errors across both models had a possession percentage above 0.5
+
 I have to write a report for a machine learning project . 
 I have combined different reports asnd write ups i have completed as part of the process .
 some of the reports are in markdown and some are in docx. 
 i want this to be in a word doc so keep it in that format. 
 help me format and clean up the following i give you to be used for my final report 
+
+
+ok review the modeland error analysis section of my notebook is there anything extra or outdated that i can get rid of there that imnot using anymore 
+
+
+please review and give feedback on this report for my machine learning project 
