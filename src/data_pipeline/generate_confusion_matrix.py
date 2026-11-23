@@ -2,7 +2,7 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay
 
-def generate_confusion_matrix(result_confusion_matrix):
+def generate_confusion_matrix(result_confusion_matrix, title="Confusion Matrix"):
     """
     Generate a confusion matrix given true labels and predicted labels.
 
@@ -20,5 +20,5 @@ def generate_confusion_matrix(result_confusion_matrix):
     )
 
     display.plot(cmap="Blues", values_format="d")
-    plt.title("Gradient Boosting Confusion Matrix - 2025 Test Fold")
+    plt.title(title)
     plt.show()
