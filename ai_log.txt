@@ -195,4 +195,4 @@ help me format and clean up the following i give you to be used for my final rep
 ok review the modeland error analysis section of my notebook is there anything extra or outdated that i can get rid of there that imnot using anymore 
 
 
-please review and give feedback on this report for my machine learning project 
+please review and give feedback on this report for my machine learning project arecord -f cd -d 5 test-hq.wav && aplay test-hq.wav
